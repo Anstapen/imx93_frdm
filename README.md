@@ -70,3 +70,38 @@ For a detailed description of the Boot Flow, see Chapter 3.1 of NXP AN14093.
 6. Invoke ``make SOC=iMX93 flash_singleboot`` to create the binary
 
 7. Connect the FRDM Board via USB and execute `sudo ~/Downloads/uuu -b sd flash.bin` to copy the bootloader binary to the target.
+
+## Setting up a Network File System
+
+```
+$ sudo apt-get install nfs-kernel-server
+$ sudo mkdir /home/${USER}/nfs
+$ sudo chmod 777 /home/${USER}/nfs
+```
+
+```
+$ sudo vim /etc/exports
+/home/<user>/nfs *(rw,sync,no_root_squash,no_subtree_check)
+```
+
+```
+$ sudo service nfs-kernel-server restart
+```
+
+Currently, the relevant kernel arguments are in "mmcargs":
+
+```
+setenv bootargs '${jh_clk}' '${mcore_clk}' console='${console}' root=/dev/nfs ip=192.168.10.6 nfsroot=192.168.10.2:/home/anton/Repositories/pedal_rootfs,nfsvers=3,tcp
+```
+
+## Enable SSH on the target
+
+OpenSSH needs to be enabled in Buildroot.
+
+This needs to be enabled in `/etc/ssh/sshd_config` :
+
+```
+PermitRootLogin yes
+```
+
+Also,  password needs to be enabled for root.
