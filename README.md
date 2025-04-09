@@ -105,3 +105,19 @@ PermitRootLogin yes
 ```
 
 Also,  password needs to be enabled for root.
+
+## Developing custom Linux Kernel Drivers
+
+When developing custom Linux Kernel Drivers be sure to execute the following commands in the buildroot directory:
+
+```
+make linux-rebuild
+make
+sudo tar -C ~/Repositories/pedal_rootfs/ -xf output/images/rootfs.tar
+```
+
+To use a local linux repository, create a file `local.mk` in the buildroot repository with the following content:
+
+```
+LINUX_OVERRIDE_SRCDIR=<path_to_linux_repo>
+```
